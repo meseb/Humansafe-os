@@ -1,18 +1,31 @@
 name: archivia
 on:
   push:
-    paths: ['prompts/**', 'news/prompts/**']
+    paths:
+      - 'prompts/**'
+
+permissions:
+  contents: write
+
 jobs:
   log:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          date=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          echo "{\"data\":\"$date\",\"repo\":\"humansafe-os\"}" >> storia/indice.json
-      - run: |
+      - name: Scarica repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Aggiorna indice
+        run: |
+          mkdir -p storia
+          DATA=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "{\"data\":\"$DATA\",\"commit\":\"${{ github.sha }}\"}" >> storia/indice.json
+
+      - name: Salva
+        run: |
           git config user.name "meseb"
           git config user.email "messoud.sebbahi@gmail.com"
-          git add storia/
-          git commit -m "log" || exit 0
+          git add storia/indice.json
+          git commit -m "log automatico" || echo "niente da salvare"
           git push

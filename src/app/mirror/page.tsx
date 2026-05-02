@@ -6,10 +6,10 @@ import { MirrorTimeline } from '@/components/modules/MirrorTimeline';
 
 // Mock: in produzione, carica da Firestore
 const mockTimeline = [
-  { id: '1', date: '2024-05-01', hsi: 85, type: 'log' },
-  { id: '2', date: '2024-05-05', hsi: 35, type: 'crash' },
-  { id: '3', date: '2024-05-10', hsi: 60, type: 'recovery' },
-  { id: '4', date: '2024-05-12', hsi: 72, type: 'log' },
+  { id: '1', date: '2024-05-01', hsi: 85, type: 'log' as const },
+  { id: '2', date: '2024-05-05', hsi: 35, type: 'crash' as const },
+  { id: '3', date: '2024-05-10', hsi: 60, type: 'recovery' as const },
+  { id: '4', date: '2024-05-12', hsi: 72, type: 'log' as const },
 ];
 
 export default function MirrorPage() {

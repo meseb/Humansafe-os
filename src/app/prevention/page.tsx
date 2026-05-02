@@ -1,4 +1,7 @@
 // src/app/prevention/page.tsx
+'use client';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+
 export default function PreventionPage() {
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
@@ -33,14 +36,15 @@ export default function PreventionPage() {
   );
 }
 
-function PreventionCard({ title, description, action }: { title: string; description: string; action: () => void }) {
+// In a real app we'd handle onClick properly via a client component or link.
+// For now, styling it as a clickable card.
+function PreventionCard({ title, description, action }: { title: string; description: string; action?: () => void }) {
   return (
-    <button
-      onClick={action}
-      className="p-4 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-    >
-      <h3 className="font-semibold">{title}</h3>
-      <p className="text-sm text-gray-600 mt-1">{description}</p>
-    </button>
+    <Card className="cursor-pointer hover:bg-gray-50 transition" onClick={action}>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+    </Card>
   );
 }

@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { calculateHSI, HSIData } from '@/lib/hsi';
 import { HSIIndicator } from '@/components/ui/HSIIndicator';
 import { StateTag } from '@/components/ui/StateTag';
+import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 
 export default function HSICalculator() {
   const [inputs, setInputs] = useState<HSIData>({
@@ -25,32 +27,36 @@ export default function HSICalculator() {
       <h2 className="text-xl font-semibold">Simulatore HSI</h2>
 
       {(['sleep', 'stress', 'mentalLoad', 'socialConnection'] as const).map(key => (
-        <div key={key} className="space-y-2">
-          <label className="block text-sm font-medium capitalize">
-            {key.replace(/([A-Z])/g, ' $1').trim()}
-          </label>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={inputs[key]}
-            onChange={e => handleChange(key, Number(e.target.value))}
+        <div key={key} className="space-y-4">
+          <div className="flex justify-between">
+            <label className="block text-sm font-medium capitalize">
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+            <span className="text-sm font-medium text-gray-600">{inputs[key]}</span>
+          </div>
+          <Slider
+            min={0}
+            max={100}
+            step={1}
+            value={[inputs[key]]}
+            onValueChange={(val) => handleChange(key, typeof val === 'number' ? val : val[0])}
             className="w-full"
           />
-          <span className="text-sm text-gray-600">{inputs[key]}</span>
         </div>
       ))}
 
-      <div className="border-t pt-6 space-y-4">
+      <div className="border-t pt-6 space-y-6">
         <HSIIndicator score={result.score} />
-        <StateTag state={result.state} />
-        <p className="text-gray-800">{result.interpretation}</p>
-        <button
-          onClick={() => console.log('Salva HSI:', result)} // sostituire con chiamata Firebase
-          className="mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
+        <div className="flex items-center space-x-4">
+          <StateTag state={result.state} />
+          <p className="text-gray-800 text-sm font-medium">{result.interpretation}</p>
+        </div>
+        <Button
+          onClick={() => console.log('Salva HSI:', result)} // TODO: sostituire con chiamata Supabase
+          className="w-full mt-4"
         >
           Salva risultato
-        </button>
+        </Button>
       </div>
     </div>
   );
